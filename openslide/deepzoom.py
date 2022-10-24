@@ -161,7 +161,7 @@ class DeepZoomGenerator:
         """The total number of Deep Zoom tiles in the image."""
         return sum(t_cols * t_rows for t_cols, t_rows in self._t_dimensions)
 
-    def get_tile(self, level, address):
+    def get_tile(self, level, address, process_number):
         """Return an RGB PIL.Image for a tile.
 
         level:     the Deep Zoom level.
@@ -170,11 +170,11 @@ class DeepZoomGenerator:
 
         # Read tile
         args, z_size = self._get_tile_info(level, address)
-        tile = self._osr.read_region(*args)
+        tile = self._osr.read_region(*args, process_number)
 
         # Apply on solid background
-        bg = Image.new('RGB', tile.size, self._bg_color)
-        tile = Image.composite(tile, bg, tile)
+        # bg = Image.new('RGB', tile.size, self._bg_color)
+        # tile = Image.composite(tile, bg, tile)
 
         # Scale to the correct size
         if tile.size != z_size:
